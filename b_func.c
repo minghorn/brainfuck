@@ -1,43 +1,53 @@
 #include "brainfuck.h"
 
-void	b_while(char *s, int i, int *b);
+int save;
 
-void	b_func(char *s, int i, int *b)
+/*
+ * s: the brainfuck program string
+ * i: index of s being checked
+ * b: value of the current byte
+*/
+
+int		b_func(char *s, int i, int *b)
 {
+	if (s[i] == '\0')
+		return (1);
 	if (s[i] == '>')
-		b++;
+		++b;
 	else if (s[i] == '<')
-		b--;
+		--b;
 	else if (s[i] == '+')
-		*b = *b + 1;
+		++*b;
 	else if (s[i] == '-')
-		*b = *b - 1;
+		--*b;
 	else if (s[i] == '.')
 		write(1, b, 1);
-	else if (s[i] == '[')
+	else if (s[i] == '[' || s[i] == ']')
 		b_while(s, i, b);
-	if (s[++i] != '\0')
-		b_func(s, i, b);
+	return (b_func(s, ++i, b));
 }
 
-void	b_while(char *s, int i, int *b)
+int		b_while(char *s, int i, int *b)
 {
-	int save;
-
-	save = i;
-	if (*b != 0)
+	printf("inside while, b is: %d\n", *b);
+	if (s[i] == '[')
 	{
-		while (s[i] != ']' && s[i++] != '\0')
-			b_func(s, i, b);
 		if (*b != 0)
 		{
-			i = save;
-			b_while(s, i, b);
-		}
-	}
-	else
-	{
-		while (s[i] != ']')
+			save = i;
 			i++;
+		}
+		else
+		{
+			while (s[i] != ']')
+				i++;
+		}
+		return (b_func(s, i, b));
 	}
+	else if (s[i] == ']')
+	{
+		if (*b != 0)
+			return (b_func(s, save, b));
+	}
+	return (b_func(s, ++i, b));
 }

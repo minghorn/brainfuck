@@ -14,4 +14,5 @@ void	brainfuck(char *s)
 		b_func(s, i, b);
 	}
 	free(b);
+	b = NULL;
 }
