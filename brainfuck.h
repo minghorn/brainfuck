@@ -16,10 +16,14 @@ typedef struct		s_stack
 	t_item			*head;
 }					t_stack;
 
-int		b_func(char *s, int i, int *b);
+int		b_func(char *s, int i, int *b, t_stack *stack);
 int		*ft_brzero(void);
-int		b_open(char *s, int i, int *b);
-int		b_close(char *s, int i, int *b);
+int		b_open(char *s, int i, int *b, t_stack *stack);
+int		b_close(char *s, int i, int *b, t_stack *stack);
 void	brainfuck(char *s);
+t_item	*new_item(int pos, t_item *next);
+t_stack	*init_stack(void);
+int		push(t_stack *stack, int pos);
+int		pop(t_stack *stack);
 
 #endif

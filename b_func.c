@@ -6,9 +6,7 @@
  * b: value of the current byte
 */
 
-int save;
-
-int		b_func(char *s, int i, int *b)
+int		b_func(char *s, int i, int *b, t_stack *stack)
 {
 	if (s[i] == '\0')
 		return (1);
@@ -23,16 +21,19 @@ int		b_func(char *s, int i, int *b)
 	else if (s[i] == '.')
 		write(1, b, 1);
 	else if (s[i] == '[')
-		return (b_func(s, b_open(s, i, b), b));
+		return (b_func(s, b_open(s, i, b, stack), b, stack));
 	else if (s[i] == ']')
-		return (b_func(s, b_close(s, i, b), b));
-	return (b_func(s, ++i, b));
+		return (b_func(s, b_close(s, i, b, stack), b, stack));
+	return (b_func(s, ++i, b, stack));
 }
 
-int		b_open(char *s, int i, int *b)
+int		b_open(char *s, int i, int *b, t_stack *stack)
 {
 	if (*b != 0)
-		save = i;
+	{
+		if (stack->head->pos != i)
+			push(stack, i);
+	}
 	else
 	{
 		while (s[i] != ']')
@@ -41,9 +42,10 @@ int		b_open(char *s, int i, int *b)
 	return (++i);
 }
 
-int		b_close(char *s, int i, int *b)
+int		b_close(char *s, int i, int *b, t_stack *stack)
 {
 	if (*b != 0)
-		return (save);
+		return (stack->head->pos);
+	pop(stack);
 	return (++i);
 }
