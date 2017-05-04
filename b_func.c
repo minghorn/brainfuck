@@ -1,12 +1,12 @@
 #include "brainfuck.h"
 
-int save;
-
 /*
  * s: the brainfuck program string
  * i: index of s being checked
  * b: value of the current byte
 */
+
+int save;
 
 int		b_func(char *s, int i, int *b)
 {
@@ -22,32 +22,28 @@ int		b_func(char *s, int i, int *b)
 		--*b;
 	else if (s[i] == '.')
 		write(1, b, 1);
-	else if (s[i] == '[' || s[i] == ']')
-		b_while(s, i, b);
+	else if (s[i] == '[')
+		return (b_func(s, b_open(s, i, b), b));
+	else if (s[i] == ']')
+		return (b_func(s, b_close(s, i, b), b));
 	return (b_func(s, ++i, b));
 }
 
-int		b_while(char *s, int i, int *b)
+int		b_open(char *s, int i, int *b)
 {
-	printf("inside while, b is: %d\n", *b);
-	if (s[i] == '[')
+	if (*b != 0)
+		save = i;
+	else
 	{
-		if (*b != 0)
-		{
-			save = i;
+		while (s[i] != ']')
 			i++;
-		}
-		else
-		{
-			while (s[i] != ']')
-				i++;
-		}
-		return (b_func(s, i, b));
 	}
-	else if (s[i] == ']')
-	{
-		if (*b != 0)
-			return (b_func(s, save, b));
-	}
-	return (b_func(s, ++i, b));
+	return (++i);
+}
+
+int		b_close(char *s, int i, int *b)
+{
+	if (*b != 0)
+		return (save);
+	return (++i);
 }
