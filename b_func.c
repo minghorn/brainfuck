@@ -20,6 +20,8 @@ int		b_func(char *s, int i, int *b, t_stack *stack)
 		--*b;
 	else if (s[i] == '.')
 		write(1, b, 1);
+	else if (s[i] == ',')
+		*b = getchar();
 	else if (s[i] == '[')
 		return (b_func(s, b_open(s, i, b, stack), b, stack));
 	else if (s[i] == ']')
