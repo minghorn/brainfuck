@@ -7,12 +7,8 @@ void	brainfuck(char *s)
 
 	i = 0;
 	b = ft_brzero();
-	printf("Inside brainfuck\n");
 	if (b)
-	{
-		printf("initialization worked\n");
 		b_func(s, i, b);
-	}
 	free(b);
 	b = NULL;
 }
